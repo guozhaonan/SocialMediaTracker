@@ -1,0 +1,19 @@
+.box {
+	margin: 5px;
+	width: 300px;
+}
+.grid-item {
+  width: 200px;
+}
+.box img {
+	width: 100%;
+}
+.intro {
+	margin: 25px;
+}
+.center {
+	margin: auto;
+  width: 70%;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}

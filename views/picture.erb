@@ -1,0 +1,13 @@
+<div class="jumbotron">
+  <h1><%= @instagram_post.user.username %></h1>
+  <img src = "<%= @instagram_post.images.standard_resolution.url %>">
+  <% description = @instagram_post.caption.text %>
+  <% sentiment_hash = AlchemyAPI.search(:sentiment_analysis, text: description) %>
+  <% keyword_hash = AlchemyAPI.search(:keyword_extraction, text: description) %>
+
+  <% score = sentiment_hash["score"] %>
+  <% type = sentiment_hash["type"] %>
+  <h3><%= description %></h3>
+  <h4><%= score %></h4>
+  <h4><%= type %></h4>
+</div>

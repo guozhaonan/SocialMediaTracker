@@ -1,0 +1,74 @@
+<!-- Displays Amount of posts with the specified tag -->
+<h1>
+  Total Count of Instagram Posts with #<%= @tags[0].name %> : <%= @tags[0].media_count %>
+</h1>
+<!-- This is the logic check to make sure there are related tags to pull from. The Instagram API Tag Search call does not always return multiple results so this checks to make sure there are results to display and displays related tags if possible -->
+<% if @tags.length == 0 %>
+  <h2>There are no related searches</h2>
+<% elsif @tags.length > 6 %>
+<h2>Related Tags</h2>
+<!-- Displays the results in a small table -->
+<table class="table table-striped">
+  <tr>
+    <th>Tag</th>
+    <th>Amount of Posts</th>
+  </tr>
+<!-- Displays 6 results at the maximum -->
+<% for @counter in 1..6 %>
+  <tr>
+    <td><a href = '/<%= @tags[@counter].name %>'>#<%= @tags[@counter].name %></a></td>
+    <td><%= @tags[@counter].media_count %></td>
+  </tr>
+<% end %><!-- End of For Loop -->
+<% else %>
+  <h2>Related Tags</h2>
+    <% for @counter in 1..@tags.length-1 %>
+      <tr>
+        <td><a href = '/<%= @tags[@counter].name %>'>#<%= @tags[@counter].name %></a></td>
+        <td><%= @tags[@counter].media_count %>)</td>
+      </tr>
+    <% end %><!-- End of For Loop -->
+<% end %><!-- End of Conditional(If/ElseIf/Else) Statement -->
+</table><!-- End of Table -->
+
+<!-- Beginning of the Instagram Posts Display -->
+<!-- This first div is for implementing JQuery Masonry working -->
+<div id="instagram" class="transitions-enabled">
+  <!-- Each Loop designated to refer to instance variable "@instagram" declared in app.rb -->
+  <% @instagram.each do |instagram| %>
+    <% description = instagram.caption["text"] %>
+    <% app_sentiment_hash = AlchemyAPI.search(:sentiment_analysis, text: description) %>
+    <% app_type = app_sentiment_hash["type"] %>
+    <% hashtags = instagram.tags %>
+    <% instagram_id = instagram.id %>
+
+    <% username = instagram.user.username %>
+
+      <!-- This div refers to the overall box and the Item Selector in Masonry "box" -->
+      <div class = "box panel panel-default">
+        <!-- This div is the head of the box -->
+        <div class = "panel-body">
+          <!-- This is meant to link the user to the Instagram User Account on Instagram.com -->
+          <a href = "http://instagram.com/<%= username %>">
+            <%= username %>
+          </a>
+          <br>
+          <p><%= description %></p>
+          <h3>Sentiment Score:<%= app_type %></h3>
+          <!-- This is the calling of the Alchemy API for the sake of getting the sentiment score from the instagram caption -->
+          <!-- Creates variable hash because the output of the Instagram API is a hash -->
+          <!-- This calls the specific score of every instagram caption and outputs it -->
+        </div><!-- End of top of the box -->
+        <!-- Image in Low Resolution -->
+        <img src = "<%= instagram.images.low_resolution.url %>" >
+        <!-- Beginning of bottom of box, only for instagram caption -->
+        <div class = "panel-body">
+        <h5>List of Tags:</h5>
+          <% for hash in hashtags %>
+            <a href="/<%=hash%>">#<%=hash%></a>
+          <% end %>
+          <p><a href="/post/<%= instagram_id %>" class="btn btn-primary" role="button">Display Full Analysis</a></p>
+        </div><!-- End of bottom of box information -->
+    </div><!-- End of overall box -->
+  <% end %>
+</div><!-- End of Instagram Photo Displays -->
