@@ -1,9 +1,13 @@
 <div class="jumbotron">
-  <h1><%= @instagram_post.user.username %></h1>
+  <h1>Individual Post View</h1>
+  <h3>Sentiment is displayed on a scale from -1 to 1 with -1 being the most negative sentiment and 1 being the most positive </h3>
+  <h2><%= @instagram_post.user.username %></h2>
   <img src = "<%= @instagram_post.images.standard_resolution.url %>">
   <% description = @instagram_post.caption.text %>
+  <!-- Calling the Sentiment Analysis API as well as the Keyword Extraction API -->
   <% sentiment_hash = AlchemyAPI.search(:sentiment_analysis, text: description) %>
-  <% keyword_hash = AlchemyAPI.search(:keyword_extraction, text: description) %>
+  <!-- Keyword is commented out for now in order to improve on the design before adding that aspect of functionality -->
+  <!-- <% keyword_hash = AlchemyAPI.search(:keyword_extraction, text: description) %> -->
 
   <% score = sentiment_hash["score"] %>
   <% type = sentiment_hash["type"] %>

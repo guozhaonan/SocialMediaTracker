@@ -39,11 +39,12 @@ get '/:keyword' do
   #This is where the view for the display of Instagram posts with sentiment analysis scores is being declared
   erb :app
 end
+#This is the route to access individual posts breakdowns of sentiment analysis
 get '/post/:id' do
-
+#This sets the variable 'id' for use in the Instagram API
 id = params[:id]
-
+#This is the call to the instagram API for information on the individual post
 @instagram_post = Instagram.media_item(id)
-
+#This is the where the view for the individual post is declared and referenced
 erb :picture
 end

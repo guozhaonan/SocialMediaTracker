@@ -36,8 +36,11 @@
 <div id="instagram" class="transitions-enabled">
   <!-- Each Loop designated to refer to instance variable "@instagram" declared in app.rb -->
   <% @instagram.each do |instagram| %>
+    <!-- Mass declarations of variables to be displayed later -->
     <% description = instagram.caption["text"] %>
+    <!-- Calling the AlchemyAPI in order to access the sentiment of individual descriptions -->
     <% app_sentiment_hash = AlchemyAPI.search(:sentiment_analysis, text: description) %>
+    <!-- app_type tends to cause less errors than app_score so it is what will be used for the time being -->
     <% app_type = app_sentiment_hash["type"] %>
     <% hashtags = instagram.tags %>
     <% instagram_id = instagram.id %>
@@ -63,6 +66,7 @@
         <img src = "<%= instagram.images.low_resolution.url %>" >
         <!-- Beginning of bottom of box, only for instagram caption -->
         <div class = "panel-body">
+        <!-- A for loop that runs through the array of tags that Instagram provides in order to display individual URL's to each hashtag -->
         <h5>List of Tags:</h5>
           <% for hash in hashtags %>
             <a href="/<%=hash%>">#<%=hash%></a>
